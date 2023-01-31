@@ -33,3 +33,22 @@ dataset = DiabetesDataset()
 print(dataset[10])
 len(dataset)
 # %%
+class CustomDataset(Dataset):
+    def __init__(self, X, y) -> None:
+        super().__init__()
+        assert len(X) == len(y) # feature and label arrays must have same length
+        self.X = X
+        self.y = y
+    
+    def __getitem__(self, index):
+        return self.X[index], self.y[index]
+    
+    def __len__(self):
+        return len(self.X)
+
+# %% DataLoaders
+dataset = CustomDataset(torch.randn(300, 10), torch.randint(0, 5, size=(300, )))
+dataloader = DataLoader(dataset, batch_size=64)
+
+for (X, y) in dataloader:
+    print(X.shape, y.shape)
