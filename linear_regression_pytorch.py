@@ -1,5 +1,6 @@
 # %%
 import torch
+import torch.nn.functional as F 
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 from torchvision import transforms
@@ -28,5 +29,15 @@ class LinearRegression(torch.nn.Module):
         return self.linear_layer(features)
 # %%
 model = LinearRegression()
-print(model(features))
 
+def train(model, epochs=10):
+    for epoch in range(epochs):
+        for batch in train_loader:
+            features, labels = batch
+            prediction = model(features)
+            loss = F.mse_loss(prediction, labels)
+            loss.backward()
+            print(loss)
+            # optimisation step
+
+train(model)
