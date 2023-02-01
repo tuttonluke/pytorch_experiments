@@ -22,14 +22,14 @@ class NN(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
         # define layers
-        self.linear_layer = torch.nn.Linear(10, 16)
-        self.linear_layer2 = torch.nn.Linear(16, 1)
+        self.layers = torch.nn.Sequential(
+            torch.nn.Linear(10, 16),
+            torch.nn.ReLU(),
+            torch.nn.Linear(16, 1)
+        )
 
     def forward(self, X):
-        X = self.linear_layer(X)
-        X = F.relu(X)
-        X = self.linear_layer2(X)
-        return X # return predictions
+        return self.layers(X)
 
 def regression_train(model, train_loader, epochs=10):
     optimiser = torch.optim.SGD(model.parameters(), lr=0.001)
@@ -54,4 +54,4 @@ if __name__ == "__main__":
     train_loader = DataLoader(dataset, shuffle=True, batch_size=8)
     model = NN()
 
-    regression_train(model)
+    regression_train(model, train_loader)
