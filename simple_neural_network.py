@@ -2,8 +2,8 @@
 import torch
 import torch.nn.functional as F 
 from torch.utils.data import Dataset, DataLoader
-from torchvision.datasets import MNIST
-from torchvision import transforms
+# from torchvision.datasets import MNIST
+# from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
 from sklearn.datasets import load_diabetes, make_classification, load_iris
 # %%
@@ -55,3 +55,12 @@ if __name__ == "__main__":
     model = NN()
 
     regression_train(model, train_loader)
+
+    # save model
+    torch.save(model.state_dict(), "model.pt")
+
+    # load in model
+    state_dict = torch.load("model.pt")
+    new_model = NN()
+    new_model.load_state_dict(state_dict)
+    regression_train(new_model)
